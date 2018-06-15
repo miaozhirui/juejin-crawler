@@ -13,8 +13,8 @@ app.get('/', async function (req, res) {
     let {tagId} = req.query;
     tagId = tagId ? tagId : tags[0];
 
-     let articles = await query('SELECT * FROM articles JOIN article_tag on articles.id = article_tag.article_id WHERE article_tag.tag_id = ?',[tagId ? tagId.id : tags[0]]);
-
+     let articles = await query('SELECT * FROM articles JOIN article_tag on articles.id = article_tag.article_id WHERE article_tag.tag_id = ?',[tagId ? tagId : tags[0].id]);
+    
     res.render('index', {tags, articles})
 
 })
@@ -27,7 +27,7 @@ app.get('/detail/:id', async function (req, res) {
 
     let tags = await query('SELECT tags.* FROM tags JOIN article_tag on tags.id = article_tag.tag_id WHERE article_tag.`article_id` = ?',[id]);
 
-    console.log(tags)
+
     res.render('detail.html', {article:articles[0], tags})
 })
 app.listen(8000);
