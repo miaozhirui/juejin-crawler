@@ -35,7 +35,7 @@ app.listen(8000);
 //写个定时任务
 const CronJob = require('cron').CronJob;
 const {spawn} = require('child_process');
-// const job = new CronJob('0 */30 * * * *', function () {
+const job = new CronJob('0 */30 * * * *', function () {
 
     let child = spawn(process.execPath, [path.resolve(__dirname, '../update/index.js')]);
     child.stdout.pipe(process.stdout);//将正确信息输出到主屏幕上面
@@ -44,6 +44,6 @@ const {spawn} = require('child_process');
 
         console.log('任务执行出错了')
     })
-// })
+})
 
-// job.start();
+job.start();
