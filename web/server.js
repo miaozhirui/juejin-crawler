@@ -9,10 +9,11 @@ app.engine('html', require('ejs').__express)//设置什么模板处理该后缀�
 
 app.get('/', async function (req, res) {
 
-
     let tags = await query('SELECT * FROM tags');
     let {tagId} = req.query;
-    let articles = await query('SELECT * FROM articles JOIN article_tag on articles.id = article_tag.article_id WHERE article_tag.tag_id = ?',[tagId ? tagId : tags[0]]);
+    tagId = tagId ? tagId : tags[0];
+
+     let articles = await query('SELECT * FROM articles JOIN article_tag on articles.id = article_tag.article_id WHERE article_tag.tag_id = ?',[tagId ? tagId.id : tags[0]]);
 
     res.render('index', {tags, articles})
 
@@ -34,15 +35,15 @@ app.listen(8000);
 //写个定时任务
 const CronJob = require('cron').CronJob;
 const {spawn} = require('child_process');
-const job = new CronJob('0 */30 * * * *', function () {
+// const job = new CronJob('0 */30 * * * *', function () {
 
-    let child = spawn(process.execPath, [path.resolve(__dirname, 'update/index.js')]);
+    let child = spawn(process.execPath, [path.resolve(__dirname, '../update/index.js')]);
     child.stdout.pipe(process.stdout);//将正确信息输出到主屏幕上面
     child.stderr.pipe(process.stderr);//将错误信息输出到主屏幕上面
     child.on('error', function () {//监听子进程错误信息
 
         console.log('任务执行出错了')
     })
-})
+// })
 
-job.start();
+// job.start();
